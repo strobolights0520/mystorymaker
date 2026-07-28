@@ -204,8 +204,8 @@ async function createBase(template: TemplateId) {
   const imported = await import("pptxgenjs");
   const PptxGenJS = imported.default;
   const pptx = new PptxGenJS();
-  pptx.defineLayout({ name: "A4_LANDSCAPE", width: 11.69, height: 8.27 });
-  pptx.layout = "A4_LANDSCAPE";
+  pptx.defineLayout({ name: "WIDE_16_9", width: 13.333, height: 7.5 });
+  pptx.layout = "WIDE_16_9";
   pptx.author = "MY STORY MAKER";
   pptx.company = "MY STORY MAKER";
   pptx.subject = "自己紹介資料";
@@ -227,9 +227,9 @@ function addHeader(
   eyebrow: string,
 ) {
   slide.addText(eyebrow, {
-    x: 0.61,
-    y: 0.42,
-    w: 5.8,
+    x: 0.65,
+    y: 0.34,
+    w: 6.5,
     h: 0.2,
     fontFace: "Arial",
     fontSize: 7,
@@ -239,12 +239,12 @@ function addHeader(
     margin: 0,
   });
   slide.addText(title, {
-    x: 0.61,
-    y: 0.69,
-    w: 7.6,
+    x: 0.65,
+    y: 0.58,
+    w: 8.8,
     h: 0.5,
     fontFace: "Yu Gothic",
-    fontSize: 23,
+    fontSize: 22,
     bold: true,
     color: palette.fg,
     margin: 0,
@@ -252,17 +252,17 @@ function addHeader(
     fit: "shrink",
   });
   slide.addShape("rect", {
-    x: 9.42,
-    y: 0.54,
+    x: 10.82,
+    y: 0.45,
     w: 0.06,
     h: 0.42,
     line: { color: palette.accent, transparency: 100 },
     fill: { color: palette.accent },
   });
   slide.addText(name, {
-    x: 9.62,
-    y: 0.58,
-    w: 1.45,
+    x: 11.02,
+    y: 0.49,
+    w: 1.65,
     h: 0.3,
     align: "right",
     fontFace: "Yu Gothic",
@@ -280,8 +280,8 @@ function addFooter(
   left: string,
 ) {
   slide.addText(left, {
-    x: 0.61,
-    y: 7.84,
+    x: 0.65,
+    y: 7.16,
     w: 1.6,
     h: 0.13,
     fontFace: "Arial",
@@ -292,16 +292,16 @@ function addFooter(
     margin: 0,
   });
   slide.addShape("line", {
-    x: 2.1,
-    y: 7.9,
-    w: 7.55,
+    x: 2.25,
+    y: 7.22,
+    w: 8.6,
     h: 0,
     line: { color: palette.muted, transparency: 68, width: 0.5 },
   });
   slide.addText("MY STORY MAKER", {
-    x: 9.8,
-    y: 7.84,
-    w: 1.25,
+    x: 10.98,
+    y: 7.16,
+    w: 1.7,
     h: 0.13,
     align: "right",
     fontFace: "Arial",
@@ -322,9 +322,9 @@ async function addDecorationSlide(
   slide.background = { color: palette.bg };
 
   slide.addText("DECORATION TOOLKIT", {
-    x: 0.61,
-    y: 0.5,
-    w: 7.6,
+    x: 0.65,
+    y: 0.38,
+    w: 8.6,
     h: 0.46,
     fontFace: "Arial",
     fontSize: 23,
@@ -336,9 +336,9 @@ async function addDecorationSlide(
   slide.addText(
     "好きな素材をコピーして、1枚目に貼り付けて使えます。テキスト・色・サイズも自由に編集できます。",
     {
-      x: 0.61,
-      y: 1.05,
-      w: 8.8,
+      x: 0.65,
+      y: 0.92,
+      w: 9.8,
       h: 0.28,
       fontFace: "Yu Gothic",
       fontSize: 8.5,
@@ -348,18 +348,18 @@ async function addDecorationSlide(
     },
   );
   slide.addShape("roundRect", {
-    x: 9.63,
-    y: 0.54,
-    w: 1.43,
+    x: 11.1,
+    y: 0.42,
+    w: 1.58,
     h: 0.4,
     rectRadius: 0.06,
     line: { color: palette.accent, transparency: 100 },
     fill: { color: palette.accent },
   });
   slide.addText(template.toUpperCase(), {
-    x: 9.63,
-    y: 0.66,
-    w: 1.43,
+    x: 11.1,
+    y: 0.54,
+    w: 1.58,
     h: 0.13,
     align: "center",
     fontFace: "Arial",
@@ -370,9 +370,9 @@ async function addDecorationSlide(
     margin: 0,
   });
   slide.addShape("line", {
-    x: 0.61,
-    y: 1.52,
-    w: 10.47,
+    x: 0.65,
+    y: 1.35,
+    w: 12.03,
     h: 0,
     line: { color: palette.muted, transparency: 72, width: 0.6 },
   });
@@ -380,7 +380,7 @@ async function addDecorationSlide(
   const addSectionLabel = (text: string, x: number, width: number) => {
     slide.addText(text, {
       x,
-      y: 1.79,
+      y: 1.56,
       w: width,
       h: 0.18,
       fontFace: "Arial",
@@ -392,9 +392,9 @@ async function addDecorationSlide(
     });
   };
 
-  addSectionLabel("TEXT LABELS", 0.61, 3.15);
-  addSectionLabel("NUMBERS / SHAPES / LINES", 4.07, 3.25);
-  addSectionLabel("SPEECH BUBBLES", 7.73, 3.35);
+  addSectionLabel("TEXT LABELS", 0.65, 3.25);
+  addSectionLabel("NUMBERS / SHAPES / LINES", 4.35, 3.45);
+  addSectionLabel("SPEECH BUBBLES", 8.25, 4.43);
 
   const textLabels = [
     { text: "MY STORY", fill: palette.accent, color: "20201F" },
@@ -402,20 +402,20 @@ async function addDecorationSlide(
     { text: "FAVORITE", fill: palette.fg, color: palette.bg },
   ];
   textLabels.forEach((item, index) => {
-    const y = 2.19 + index * 0.55;
+    const y = 1.93 + index * 0.5;
     slide.addShape("roundRect", {
-      x: 0.61,
+      x: 0.65,
       y,
-      w: 2.75,
+      w: 3.05,
       h: 0.38,
       rectRadius: 0.06,
       line: { color: item.fill, transparency: 100 },
       fill: { color: item.fill },
     });
     slide.addText(item.text, {
-      x: 0.8,
+      x: 0.84,
       y: y + 0.12,
-      w: 2.37,
+      w: 2.67,
       h: 0.12,
       fontFace: "Arial",
       fontSize: 7,
@@ -426,9 +426,9 @@ async function addDecorationSlide(
     });
   });
   slide.addText("Highlight!", {
-    x: 0.61,
-    y: 4.04,
-    w: 2.95,
+    x: 0.65,
+    y: 3.55,
+    w: 3.15,
     h: 0.52,
     fontFace: "Arial",
     fontSize: 27,
@@ -439,16 +439,16 @@ async function addDecorationSlide(
     fit: "shrink",
   });
   slide.addShape("line", {
-    x: 0.63,
-    y: 4.65,
-    w: 2.65,
+    x: 0.67,
+    y: 4.12,
+    w: 2.85,
     h: -0.12,
     line: { color: palette.accent, width: 6, transparency: 12 },
   });
   slide.addText("YOUR WORDS HERE", {
-    x: 0.61,
-    y: 5.08,
-    w: 2.9,
+    x: 0.65,
+    y: 4.48,
+    w: 3.1,
     h: 0.38,
     fontFace: "Yu Gothic",
     fontSize: 13,
@@ -458,9 +458,9 @@ async function addDecorationSlide(
     fit: "shrink",
   });
   slide.addText("見出しや短いメッセージに", {
-    x: 0.61,
-    y: 5.51,
-    w: 2.9,
+    x: 0.65,
+    y: 4.88,
+    w: 3.1,
     h: 0.2,
     fontFace: "Yu Gothic",
     fontSize: 7,
@@ -469,10 +469,10 @@ async function addDecorationSlide(
   });
 
   [1, 2, 3, 4].forEach((value, index) => {
-    const x = 4.07 + index * 0.74;
+    const x = 4.35 + index * 0.8;
     slide.addShape("ellipse", {
       x,
-      y: 2.17,
+      y: 1.93,
       w: 0.54,
       h: 0.54,
       line: { color: palette.accent, transparency: 100 },
@@ -480,7 +480,7 @@ async function addDecorationSlide(
     });
     slide.addText(String(value).padStart(2, "0"), {
       x,
-      y: 2.36,
+      y: 2.12,
       w: 0.54,
       h: 0.12,
       align: "center",
@@ -494,10 +494,10 @@ async function addDecorationSlide(
 
   const shapeTypes = ["ellipse", "rect", "roundRect", "diamond", "triangle"] as const;
   shapeTypes.forEach((shapeType, index) => {
-    const x = 4.07 + index * 0.64;
+    const x = 4.35 + index * 0.68;
     slide.addShape(shapeType, {
       x,
-      y: 3.17,
+      y: 2.83,
       w: 0.42,
       h: 0.42,
       line: {
@@ -511,9 +511,9 @@ async function addDecorationSlide(
     });
   });
   slide.addShape("line", {
-    x: 4.07,
-    y: 4.13,
-    w: 2.95,
+    x: 4.35,
+    y: 3.73,
+    w: 3.25,
     h: 0,
     line: {
       color: palette.fg,
@@ -523,9 +523,9 @@ async function addDecorationSlide(
     },
   });
   slide.addShape("line", {
-    x: 4.07,
-    y: 4.65,
-    w: 2.95,
+    x: 4.35,
+    y: 4.18,
+    w: 3.25,
     h: 0,
     line: {
       color: palette.muted,
@@ -534,24 +534,24 @@ async function addDecorationSlide(
     },
   });
   slide.addShape("chevron", {
-    x: 4.07,
-    y: 5.12,
+    x: 4.35,
+    y: 4.55,
     w: 0.72,
     h: 0.48,
     line: { color: palette.accent, transparency: 100 },
     fill: { color: palette.accent },
   });
   slide.addShape("star5", {
-    x: 4.96,
-    y: 5.06,
+    x: 5.27,
+    y: 4.49,
     w: 0.58,
     h: 0.58,
     line: { color: palette.fg, transparency: 100 },
     fill: { color: palette.fg },
   });
   slide.addText("↗  +  #", {
-    x: 5.8,
-    y: 5.15,
+    x: 6.16,
+    y: 4.58,
     w: 1.2,
     h: 0.3,
     fontFace: "Arial",
@@ -608,14 +608,14 @@ async function addDecorationSlide(
   speechBubbles.forEach((bubble, index) => {
     const column = index % 2;
     const row = Math.floor(index / 2);
-    const x = 7.73 + column * 1.73;
-    const y = 2.12 + row * 1.27;
+    const x = 8.25 + column * 2.22;
+    const y = 1.88 + row * 1.2;
     slide.addText(bubble.text, {
       shape: bubble.shape,
       x,
       y,
-      w: 1.58,
-      h: 0.94,
+      w: 2.02,
+      h: 0.88,
       flipH: bubble.flipH,
       align: "center",
       valign: "middle",
@@ -638,15 +638,15 @@ async function addDecorationSlide(
   });
 
   slide.addShape("line", {
-    x: 0.61,
-    y: 6.27,
-    w: 10.47,
+    x: 0.65,
+    y: 5.65,
+    w: 12.03,
     h: 0,
     line: { color: palette.muted, transparency: 72, width: 0.6 },
   });
   slide.addText("COLOR PALETTE", {
-    x: 0.61,
-    y: 6.56,
+    x: 0.65,
+    y: 5.96,
     w: 1.7,
     h: 0.18,
     fontFace: "Arial",
@@ -664,8 +664,8 @@ async function addDecorationSlide(
     palette.bg,
   ].forEach((color, index) => {
     slide.addShape("ellipse", {
-      x: 2.38 + index * 0.55,
-      y: 6.43,
+      x: 2.45 + index * 0.55,
+      y: 5.87,
       w: 0.34,
       h: 0.34,
       line: { color: palette.muted, transparency: 58, width: 0.6 },
@@ -673,9 +673,9 @@ async function addDecorationSlide(
     });
   });
   slide.addText("コピー＆ペーストで、あなたらしい一枚に。", {
-    x: 6.26,
-    y: 6.51,
-    w: 4.82,
+    x: 7.15,
+    y: 5.96,
+    w: 5.53,
     h: 0.22,
     align: "right",
     fontFace: "Yu Gothic",
@@ -700,14 +700,14 @@ export async function createFacePowerPoint(data: FacePptData) {
   );
 
   const count = data.count;
-  const totalWidth = 10.47;
-  const gap = count === 4 ? 0.16 : 0.24;
+  const totalWidth = 12.03;
+  const gap = count === 4 ? 0.18 : 0.25;
   const cardWidth = (totalWidth - gap * (count - 1)) / count;
-  const xStart = 0.61;
-  const photoY = 1.45;
-  const photoHeight = 3.58;
-  const textY = 5.03;
-  const textHeight = 2.55;
+  const xStart = 0.65;
+  const photoY = 1.18;
+  const photoHeight = 3.16;
+  const textY = 4.34;
+  const textHeight = 2.54;
 
   for (const [index, block] of data.blocks.slice(0, count).entries()) {
     const x = xStart + index * (cardWidth + gap);
@@ -831,10 +831,10 @@ export async function createMotivationPowerPoint(
   pptx.title = data.title;
   addHeader(slide, palette, data.title, data.name, "MY MOTIVATION STORY");
   const episodes = data.episodes.slice(0, data.count);
-  const graphX = 0.98;
-  const graphY = 1.34;
-  const graphW = 9.95;
-  const graphH = 2.12;
+  const graphX = 1.05;
+  const graphY = 1.13;
+  const graphW = 11.45;
+  const graphH = 1.83;
   const xAt = (index: number) =>
     graphX + (index * graphW) / Math.max(episodes.length - 1, 1);
   const yAt = (value: number) => graphY + ((100 - value) / 200) * graphH;
@@ -852,7 +852,7 @@ export async function createMotivationPowerPoint(
       },
     });
     slide.addText(String(value), {
-      x: 0.44,
+      x: 0.48,
       y: yAt(value) - 0.08,
       w: 0.38,
       h: 0.15,
@@ -867,11 +867,14 @@ export async function createMotivationPowerPoint(
   for (let index = 0; index < episodes.length - 1; index += 1) {
     const current = episodes[index];
     const next = episodes[index + 1];
-    slide.addShape("line", {
+    const currentY = yAt(current.motivation);
+    const nextY = yAt(next.motivation);
+    const rises = nextY < currentY;
+    slide.addShape(rises ? "lineInv" : "line", {
       x: xAt(index),
-      y: yAt(current.motivation),
+      y: Math.min(currentY, nextY),
       w: xAt(index + 1) - xAt(index),
-      h: yAt(next.motivation) - yAt(current.motivation),
+      h: Math.abs(nextY - currentY),
       line: {
         color: palette.accent,
         width: 3,
@@ -919,9 +922,9 @@ export async function createMotivationPowerPoint(
     });
   }
 
-  const summaryY = 3.86;
+  const summaryY = 3.35;
   const summaryGap = 0.2;
-  const summaryW = (10.47 - summaryGap) / 2;
+  const summaryW = (12.03 - summaryGap) / 2;
   const summaryItems = [
     {
       label: "私がモチベーションが上がる時",
@@ -936,7 +939,7 @@ export async function createMotivationPowerPoint(
   ];
 
   summaryItems.forEach((item, index) => {
-    const x = 0.61 + index * (summaryW + summaryGap);
+    const x = 0.65 + index * (summaryW + summaryGap);
     slide.addShape("roundRect", {
       x,
       y: summaryY,
@@ -992,18 +995,18 @@ export async function createMotivationPowerPoint(
     });
   });
 
-  const gridY = 4.83;
+  const gridY = 4.34;
   const columns = data.count === 7 ? 4 : 3;
   const rows = Math.ceil(data.count / columns);
   const gapX = 0.18;
   const gapY = 0.17;
-  const cardW = (10.47 - gapX * (columns - 1)) / columns;
-  const cardH = (2.56 - gapY * (rows - 1)) / rows;
+  const cardW = (12.03 - gapX * (columns - 1)) / columns;
+  const cardH = (2.45 - gapY * (rows - 1)) / rows;
 
   for (const [index, episode] of episodes.entries()) {
     const column = index % columns;
     const row = Math.floor(index / columns);
-    const x = 0.61 + column * (cardW + gapX);
+    const x = 0.65 + column * (cardW + gapX);
     const y = gridY + row * (cardH + gapY);
     slide.addShape("ellipse", {
       x,

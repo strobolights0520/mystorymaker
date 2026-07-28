@@ -78,6 +78,7 @@ type SavedState = {
 
 const STORAGE_KEY = "watashi-no-kao-v1";
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
+const CAREER_ROOKIES_GP_URL = "https://gp.careerrookies.com/";
 
 const logoOptions: Array<{
   id: LogoId;
@@ -629,6 +630,31 @@ function TextAreaField({
   );
 }
 
+function CareerRookiesGpCta({ compact = false }: { compact?: boolean }) {
+  return (
+    <aside
+      className={`${styles.rookiesGpCta} ${
+        compact ? styles.rookiesGpCtaCompact : ""
+      }`}
+    >
+      <div>
+        <span>CAREER ROOKIES GP</span>
+        <p>
+          学生生活にチャレンジが足りないなと思った方はCAREER ROOKIES
+          GPへ！もれなく出場証明証とプレゼンしている様子の写真を全員分プレゼントします！
+        </p>
+      </div>
+      <a
+        href={CAREER_ROOKIES_GP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        詳しく見る <b>↗</b>
+      </a>
+    </aside>
+  );
+}
+
 function Welcome({
   onSelect,
   onRestore,
@@ -688,9 +714,11 @@ function Welcome({
           </div>
           <span className={styles.heroDotOne}>●</span>
           <span className={styles.heroDotTwo}>✦</span>
-          <span className={styles.heroLine}>POWERPOINT / EDITABLE / A4</span>
+          <span className={styles.heroLine}>POWERPOINT / EDITABLE / 16:9</span>
         </div>
       </section>
+
+      <CareerRookiesGpCta />
 
       <section className={styles.chooseSection}>
         <div className={styles.sectionHeading}>
@@ -1460,7 +1488,7 @@ export function WatashiNoKaoApp() {
           <span className={styles.pptIcon}>P</span>
           <div>
             <h3>{activeTitle || "自己紹介資料"}.pptx</h3>
-            <p>A4横・1ページ・編集可能</p>
+            <p>16:9・2ページ・編集可能</p>
           </div>
           <button
             type="button"
@@ -1476,6 +1504,7 @@ export function WatashiNoKaoApp() {
           <span>✓ 写真編集可能</span>
           <span>✓ 図形・ロゴ移動可能</span>
         </div>
+        <CareerRookiesGpCta compact />
         {validationIssues.length > 0 && (
           <div className={styles.warningBox}>
             <b>未入力の項目が{validationIssues.length}件あります</b>
@@ -1566,7 +1595,7 @@ export function WatashiNoKaoApp() {
               <span>LIVE PREVIEW</span>
               <b>リアルタイムプレビュー</b>
             </div>
-            <span className={styles.a4Badge}>A4 横</span>
+            <span className={styles.a4Badge}>16:9</span>
           </div>
           <div className={styles.previewStage}>
             <div className={styles.slideScaler}>
