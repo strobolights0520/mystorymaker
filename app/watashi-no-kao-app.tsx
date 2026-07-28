@@ -76,9 +76,57 @@ type SavedState = {
   motivation: MotivationState;
 };
 
+type DownloadRecord = {
+  anonymousId: string;
+  projectType: "MY FEATURE" | "モチベーショングラフ";
+  template: string;
+  documentTitle: string;
+  itemCount: number;
+  faceItems: Array<{
+    number: number;
+    title: string;
+    description: string;
+    hasPhoto: boolean;
+    rookiesLogoId: LogoId;
+  }>;
+  motivationEpisodes: Array<{
+    number: number;
+    period: string;
+    title: string;
+    description: string;
+    motivation: number;
+    rookiesLogoId: LogoId;
+  }>;
+  motivationUpSummary: string;
+  motivationDownSummary: string;
+  logoIds: Array<Exclude<LogoId, null>>;
+};
+
 const STORAGE_KEY = "watashi-no-kao-v1";
+const ANONYMOUS_ID_KEY = "my-story-maker-anonymous-id-v1";
+const LAST_RECORDED_DOWNLOAD_KEY = "my-story-maker-last-recorded-download-v1";
 const MAX_IMAGE_SIZE = 4 * 1024 * 1024;
-const CAREER_ROOKIES_GP_URL = "https://gp.careerrookies.com/";
+
+const getAnonymousId = () => {
+  const current = localStorage.getItem(ANONYMOUS_ID_KEY);
+  if (current) return current;
+
+  const next =
+    typeof crypto.randomUUID === "function"
+      ? crypto.randomUUID()
+      : `anonymous-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  localStorage.setItem(ANONYMOUS_ID_KEY, next);
+  return next;
+};
+
+const redactNameFromTitle = (title: string, name: string) => {
+  const nameVariants = [name.trim(), name.replace(/\s/g, "")].filter(Boolean);
+  const redacted = nameVariants.reduce(
+    (current, nameVariant) => current.split(nameVariant).join(""),
+    title,
+  );
+  return redacted.trim() || "（資料タイトル入力あり）";
+};
 
 const logoOptions: Array<{
   id: LogoId;
@@ -630,31 +678,6 @@ function TextAreaField({
   );
 }
 
-function CareerRookiesGpCta({ compact = false }: { compact?: boolean }) {
-  return (
-    <aside
-      className={`${styles.rookiesGpCta} ${
-        compact ? styles.rookiesGpCtaCompact : ""
-      }`}
-    >
-      <div>
-        <span>CAREER ROOKIES GP</span>
-        <p>
-          学生生活にチャレンジが足りないなと思った方はCAREER ROOKIES
-          GPへ！もれなく出場証明証とプレゼンしている様子の写真を全員分プレゼントします！
-        </p>
-      </div>
-      <a
-        href={CAREER_ROOKIES_GP_URL}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        詳しく見る <b>↗</b>
-      </a>
-    </aside>
-  );
-}
-
 function Welcome({
   onSelect,
   onRestore,
@@ -676,13 +699,6 @@ function Welcome({
         </div>
         <span className={styles.pcNote}>PCでの利用を推奨しています</span>
       </nav>
-
-      <aside className={styles.pcRecommendation} aria-label="ご利用環境について">
-        <b>PCでのご利用を推奨します</b>
-        <span>
-          PowerPoint（.pptx）ファイルを作成・ダウンロードするサービスです。
-        </span>
-      </aside>
 
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
@@ -714,11 +730,9 @@ function Welcome({
           </div>
           <span className={styles.heroDotOne}>●</span>
           <span className={styles.heroDotTwo}>✦</span>
-          <span className={styles.heroLine}>POWERPOINT / EDITABLE / 16:9</span>
+          <span className={styles.heroLine}>POWERPOINT / EDITABLE / A4</span>
         </div>
       </section>
-
-      <CareerRookiesGpCta />
 
       <section className={styles.chooseSection}>
         <div className={styles.sectionHeading}>
@@ -957,6 +971,7 @@ export function WatashiNoKaoApp() {
       } else {
         await createMotivationPowerPoint(motivation as MotivationPptData);
       }
+      void recordSuccessfulDownload();
     } catch (downloadError) {
       console.error(downloadError);
       setError(
@@ -964,6 +979,78 @@ export function WatashiNoKaoApp() {
       );
     } finally {
       setDownloading(false);
+    }
+  };
+
+  const recordSuccessfulDownload = async () => {
+    if (!project) return;
+
+    const activeState = project === "face" ? face : motivation;
+    const selectedItems =
+      project === "face"
+        ? face.blocks.slice(0, face.count)
+        : motivation.episodes.slice(0, motivation.count);
+    const logoIds = selectedItems
+      .map((item) => item.rookiesLogoId)
+      .filter((logoId): logoId is Exclude<LogoId, null> => logoId !== null);
+
+    const payload: DownloadRecord = {
+      anonymousId: getAnonymousId(),
+      projectType:
+        project === "face" ? "MY FEATURE" : "モチベーショングラフ",
+      template:
+        templateOptions.find((option) => option.id === activeState.template)
+          ?.title ?? activeState.template,
+      documentTitle: redactNameFromTitle(activeState.title, activeState.name),
+      itemCount: activeState.count,
+      faceItems:
+        project === "face"
+          ? face.blocks.slice(0, face.count).map((block, index) => ({
+              number: index + 1,
+              title: block.title,
+              description: block.description,
+              hasPhoto: Boolean(block.photo),
+              rookiesLogoId: block.rookiesLogoId,
+            }))
+          : [],
+      motivationEpisodes:
+        project === "motivation"
+          ? motivation.episodes
+              .slice(0, motivation.count)
+              .map((episode, index) => ({
+                number: index + 1,
+                period: episode.period,
+                title: episode.title,
+                description: episode.description,
+                motivation: episode.motivation,
+                rookiesLogoId: episode.rookiesLogoId,
+              }))
+          : [],
+      motivationUpSummary:
+        project === "motivation" ? motivation.motivationUpSummary : "",
+      motivationDownSummary:
+        project === "motivation" ? motivation.motivationDownSummary : "",
+      logoIds,
+    };
+
+    const fingerprint = JSON.stringify(payload);
+    if (localStorage.getItem(LAST_RECORDED_DOWNLOAD_KEY) === fingerprint) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/record-download", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: fingerprint,
+        keepalive: true,
+      });
+      const result = (await response.json()) as { ok?: boolean };
+      if (response.ok && result.ok) {
+        localStorage.setItem(LAST_RECORDED_DOWNLOAD_KEY, fingerprint);
+      }
+    } catch (recordError) {
+      console.warn("入力記録の送信に失敗しました。", recordError);
     }
   };
 
@@ -1488,7 +1575,7 @@ export function WatashiNoKaoApp() {
           <span className={styles.pptIcon}>P</span>
           <div>
             <h3>{activeTitle || "自己紹介資料"}.pptx</h3>
-            <p>16:9・2ページ・編集可能</p>
+            <p>A4横・1ページ・編集可能</p>
           </div>
           <button
             type="button"
@@ -1504,7 +1591,10 @@ export function WatashiNoKaoApp() {
           <span>✓ 写真編集可能</span>
           <span>✓ 図形・ロゴ移動可能</span>
         </div>
-        <CareerRookiesGpCta compact />
+        <p className={styles.dataNotice}>
+          サービス改善のため、ダウンロード時に入力内容を記録します。
+          <strong>氏名と写真ファイルは送信しません。</strong>
+        </p>
         {validationIssues.length > 0 && (
           <div className={styles.warningBox}>
             <b>未入力の項目が{validationIssues.length}件あります</b>
@@ -1595,7 +1685,7 @@ export function WatashiNoKaoApp() {
               <span>LIVE PREVIEW</span>
               <b>リアルタイムプレビュー</b>
             </div>
-            <span className={styles.a4Badge}>16:9</span>
+            <span className={styles.a4Badge}>A4 横</span>
           </div>
           <div className={styles.previewStage}>
             <div className={styles.slideScaler}>

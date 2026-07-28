@@ -10,10 +10,11 @@
 - シンプル・クール・ファッションの3テンプレート
 - JPEG・PNG・WebP写真のアップロード、拡大、位置調整
 - ROOKIES関連ロゴの選択
-- 16:9・2ページ構成のPowerPoint出力とリアルタイムプレビュー
+- 16:9・1ページのリアルタイムプレビュー
 - 編集可能なPowerPoint（`.pptx`）出力
 - LocalStorageへの自動保存と再開
 - 文字数・未入力・画像形式・容量のバリデーション
+- PowerPointダウンロード成功時のGoogleスプレッドシート記録
 
 ## 開発
 
@@ -27,6 +28,17 @@ npm run dev
 ```bash
 npm run build
 ```
+
+## 入力記録の環境変数
+
+VercelのEnvironment Variablesに以下を設定してください。
+
+```text
+SHEETS_WEB_APP_URL=https://script.google.com/macros/s/.../exec
+SHEETS_INGEST_SECRET=Apps Script側と同じ秘密文字列
+```
+
+入力記録では氏名と写真ファイルを送信しません。写真については、各項目に写真が設定されているかどうかだけを記録します。同じ内容を続けてダウンロードした場合は重複記録しません。
 
 ## ロゴについて
 
