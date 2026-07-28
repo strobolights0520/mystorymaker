@@ -394,7 +394,7 @@ async function addDecorationSlide(
 
   addSectionLabel("TEXT LABELS", 0.61, 3.15);
   addSectionLabel("NUMBERS / SHAPES / LINES", 4.07, 3.25);
-  addSectionLabel("ROOKIES LOGOS", 7.73, 3.35);
+  addSectionLabel("SPEECH BUBBLES", 7.73, 3.35);
 
   const textLabels = [
     { text: "MY STORY", fill: palette.accent, color: "20201F" },
@@ -561,31 +561,81 @@ async function addDecorationSlide(
     margin: 0,
   });
 
-  const logoIds: Array<Exclude<LogoId, null>> = [
-    "rookies",
-    "gp-2024",
-    "gp-2025",
-    "gp-2026",
-    "guild",
-    "world-series",
+  const speechBubbles = [
+    {
+      shape: "wedgeRoundRectCallout" as const,
+      text: "ひとこと",
+      fill: palette.soft,
+      color: palette.fg,
+      flipH: false,
+    },
+    {
+      shape: "wedgeEllipseCallout" as const,
+      text: "POINT!",
+      fill: palette.accent,
+      color: "20201F",
+      flipH: true,
+    },
+    {
+      shape: "wedgeRectCallout" as const,
+      text: "コメント",
+      fill: palette.fg,
+      color: palette.bg,
+      flipH: true,
+    },
+    {
+      shape: "cloudCallout" as const,
+      text: "アイデア",
+      fill: palette.soft,
+      color: palette.fg,
+      flipH: false,
+    },
+    {
+      shape: "accentBorderCallout1" as const,
+      text: "補足を入力",
+      fill: palette.bg,
+      color: palette.fg,
+      flipH: false,
+    },
+    {
+      shape: "borderCallout2" as const,
+      text: "自由に編集",
+      fill: palette.bg,
+      color: palette.fg,
+      flipH: true,
+    },
   ];
-  for (const [index, logoId] of logoIds.entries()) {
-    const y = 2.1 + index * 0.62;
-    slide.addShape("roundRect", {
-      x: 7.73,
+  speechBubbles.forEach((bubble, index) => {
+    const column = index % 2;
+    const row = Math.floor(index / 2);
+    const x = 7.73 + column * 1.73;
+    const y = 2.12 + row * 1.27;
+    slide.addText(bubble.text, {
+      shape: bubble.shape,
+      x,
       y,
-      w: 3.35,
-      h: 0.48,
-      rectRadius: 0.04,
-      line: { color: palette.muted, transparency: 86, width: 0.5 },
-      fill: { color: palette.soft, transparency: 18 },
+      w: 1.58,
+      h: 0.94,
+      flipH: bubble.flipH,
+      align: "center",
+      valign: "middle",
+      fontFace: bubble.text === "POINT!" ? "Arial" : "Yu Gothic",
+      fontSize: bubble.text === "POINT!" ? 9 : 7.5,
+      bold: true,
+      color: bubble.color,
+      margin: [4, 6, 10, 6],
+      line: {
+        color: index < 4 ? palette.fg : palette.accent,
+        transparency: index < 4 ? 72 : 0,
+        width: index < 4 ? 0.8 : 1.4,
+      },
+      fill: {
+        color: bubble.fill,
+        transparency: index >= 4 ? 100 : 0,
+      },
+      fit: "shrink",
     });
-    const logo = await logoDataUri(logoId, palette);
-    slide.addImage({
-      data: logo.data,
-      ...fitLogo(logo, 7.93, y + 0.07, 2.95, 0.34),
-    });
-  }
+  });
 
   slide.addShape("line", {
     x: 0.61,
