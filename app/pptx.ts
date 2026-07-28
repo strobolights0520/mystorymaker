@@ -313,6 +313,331 @@ function addFooter(
   });
 }
 
+async function addDecorationSlide(
+  pptx: Awaited<ReturnType<typeof createBase>>["pptx"],
+  palette: Palette,
+  template: TemplateId,
+) {
+  const slide = pptx.addSlide();
+  slide.background = { color: palette.bg };
+
+  slide.addText("DECORATION TOOLKIT", {
+    x: 0.61,
+    y: 0.5,
+    w: 7.6,
+    h: 0.46,
+    fontFace: "Arial",
+    fontSize: 23,
+    bold: true,
+    charSpacing: 1.4,
+    color: palette.fg,
+    margin: 0,
+  });
+  slide.addText(
+    "好きな素材をコピーして、1枚目に貼り付けて使えます。テキスト・色・サイズも自由に編集できます。",
+    {
+      x: 0.61,
+      y: 1.05,
+      w: 8.8,
+      h: 0.28,
+      fontFace: "Yu Gothic",
+      fontSize: 8.5,
+      color: palette.muted,
+      margin: 0,
+      fit: "shrink",
+    },
+  );
+  slide.addShape("roundRect", {
+    x: 9.63,
+    y: 0.54,
+    w: 1.43,
+    h: 0.4,
+    rectRadius: 0.06,
+    line: { color: palette.accent, transparency: 100 },
+    fill: { color: palette.accent },
+  });
+  slide.addText(template.toUpperCase(), {
+    x: 9.63,
+    y: 0.66,
+    w: 1.43,
+    h: 0.13,
+    align: "center",
+    fontFace: "Arial",
+    fontSize: 6.5,
+    bold: true,
+    charSpacing: 1.2,
+    color: "20201F",
+    margin: 0,
+  });
+  slide.addShape("line", {
+    x: 0.61,
+    y: 1.52,
+    w: 10.47,
+    h: 0,
+    line: { color: palette.muted, transparency: 72, width: 0.6 },
+  });
+
+  const addSectionLabel = (text: string, x: number, width: number) => {
+    slide.addText(text, {
+      x,
+      y: 1.79,
+      w: width,
+      h: 0.18,
+      fontFace: "Arial",
+      fontSize: 7,
+      bold: true,
+      charSpacing: 1.5,
+      color: palette.muted,
+      margin: 0,
+    });
+  };
+
+  addSectionLabel("TEXT LABELS", 0.61, 3.15);
+  addSectionLabel("NUMBERS / SHAPES / LINES", 4.07, 3.25);
+  addSectionLabel("ROOKIES LOGOS", 7.73, 3.35);
+
+  const textLabels = [
+    { text: "MY STORY", fill: palette.accent, color: "20201F" },
+    { text: "MY CHALLENGE", fill: palette.soft, color: palette.fg },
+    { text: "FAVORITE", fill: palette.fg, color: palette.bg },
+  ];
+  textLabels.forEach((item, index) => {
+    const y = 2.19 + index * 0.55;
+    slide.addShape("roundRect", {
+      x: 0.61,
+      y,
+      w: 2.75,
+      h: 0.38,
+      rectRadius: 0.06,
+      line: { color: item.fill, transparency: 100 },
+      fill: { color: item.fill },
+    });
+    slide.addText(item.text, {
+      x: 0.8,
+      y: y + 0.12,
+      w: 2.37,
+      h: 0.12,
+      fontFace: "Arial",
+      fontSize: 7,
+      bold: true,
+      charSpacing: 1.2,
+      color: item.color,
+      margin: 0,
+    });
+  });
+  slide.addText("Highlight!", {
+    x: 0.61,
+    y: 4.04,
+    w: 2.95,
+    h: 0.52,
+    fontFace: "Arial",
+    fontSize: 27,
+    bold: true,
+    italic: true,
+    color: palette.fg,
+    margin: 0,
+    fit: "shrink",
+  });
+  slide.addShape("line", {
+    x: 0.63,
+    y: 4.65,
+    w: 2.65,
+    h: -0.12,
+    line: { color: palette.accent, width: 6, transparency: 12 },
+  });
+  slide.addText("YOUR WORDS HERE", {
+    x: 0.61,
+    y: 5.08,
+    w: 2.9,
+    h: 0.38,
+    fontFace: "Yu Gothic",
+    fontSize: 13,
+    bold: true,
+    color: palette.fg,
+    margin: 0,
+    fit: "shrink",
+  });
+  slide.addText("見出しや短いメッセージに", {
+    x: 0.61,
+    y: 5.51,
+    w: 2.9,
+    h: 0.2,
+    fontFace: "Yu Gothic",
+    fontSize: 7,
+    color: palette.muted,
+    margin: 0,
+  });
+
+  [1, 2, 3, 4].forEach((value, index) => {
+    const x = 4.07 + index * 0.74;
+    slide.addShape("ellipse", {
+      x,
+      y: 2.17,
+      w: 0.54,
+      h: 0.54,
+      line: { color: palette.accent, transparency: 100 },
+      fill: { color: index % 2 === 0 ? palette.accent : palette.soft },
+    });
+    slide.addText(String(value).padStart(2, "0"), {
+      x,
+      y: 2.36,
+      w: 0.54,
+      h: 0.12,
+      align: "center",
+      fontFace: "Arial",
+      fontSize: 7,
+      bold: true,
+      color: index % 2 === 0 ? "20201F" : palette.fg,
+      margin: 0,
+    });
+  });
+
+  const shapeTypes = ["ellipse", "rect", "roundRect", "diamond", "triangle"] as const;
+  shapeTypes.forEach((shapeType, index) => {
+    const x = 4.07 + index * 0.64;
+    slide.addShape(shapeType, {
+      x,
+      y: 3.17,
+      w: 0.42,
+      h: 0.42,
+      line: {
+        color: index === 4 ? palette.accent : palette.fg,
+        width: 1.1,
+      },
+      fill: {
+        color: index === 4 ? palette.accent : palette.soft,
+        transparency: index === 4 ? 0 : 18,
+      },
+    });
+  });
+  slide.addShape("line", {
+    x: 4.07,
+    y: 4.13,
+    w: 2.95,
+    h: 0,
+    line: {
+      color: palette.fg,
+      width: 1.5,
+      beginArrowType: "none",
+      endArrowType: "triangle",
+    },
+  });
+  slide.addShape("line", {
+    x: 4.07,
+    y: 4.65,
+    w: 2.95,
+    h: 0,
+    line: {
+      color: palette.muted,
+      width: 1.2,
+      dashType: "dash",
+    },
+  });
+  slide.addShape("chevron", {
+    x: 4.07,
+    y: 5.12,
+    w: 0.72,
+    h: 0.48,
+    line: { color: palette.accent, transparency: 100 },
+    fill: { color: palette.accent },
+  });
+  slide.addShape("star5", {
+    x: 4.96,
+    y: 5.06,
+    w: 0.58,
+    h: 0.58,
+    line: { color: palette.fg, transparency: 100 },
+    fill: { color: palette.fg },
+  });
+  slide.addText("↗  +  #", {
+    x: 5.8,
+    y: 5.15,
+    w: 1.2,
+    h: 0.3,
+    fontFace: "Arial",
+    fontSize: 18,
+    bold: true,
+    color: palette.accent,
+    margin: 0,
+  });
+
+  const logoIds: Array<Exclude<LogoId, null>> = [
+    "rookies",
+    "gp-2024",
+    "gp-2025",
+    "gp-2026",
+    "guild",
+    "world-series",
+  ];
+  for (const [index, logoId] of logoIds.entries()) {
+    const y = 2.1 + index * 0.62;
+    slide.addShape("roundRect", {
+      x: 7.73,
+      y,
+      w: 3.35,
+      h: 0.48,
+      rectRadius: 0.04,
+      line: { color: palette.muted, transparency: 86, width: 0.5 },
+      fill: { color: palette.soft, transparency: 18 },
+    });
+    const logo = await logoDataUri(logoId, palette);
+    slide.addImage({
+      data: logo.data,
+      ...fitLogo(logo, 7.93, y + 0.07, 2.95, 0.34),
+    });
+  }
+
+  slide.addShape("line", {
+    x: 0.61,
+    y: 6.27,
+    w: 10.47,
+    h: 0,
+    line: { color: palette.muted, transparency: 72, width: 0.6 },
+  });
+  slide.addText("COLOR PALETTE", {
+    x: 0.61,
+    y: 6.56,
+    w: 1.7,
+    h: 0.18,
+    fontFace: "Arial",
+    fontSize: 7,
+    bold: true,
+    charSpacing: 1.5,
+    color: palette.muted,
+    margin: 0,
+  });
+  [
+    palette.accent,
+    palette.fg,
+    palette.soft,
+    palette.muted,
+    palette.bg,
+  ].forEach((color, index) => {
+    slide.addShape("ellipse", {
+      x: 2.38 + index * 0.55,
+      y: 6.43,
+      w: 0.34,
+      h: 0.34,
+      line: { color: palette.muted, transparency: 58, width: 0.6 },
+      fill: { color },
+    });
+  });
+  slide.addText("コピー＆ペーストで、あなたらしい一枚に。", {
+    x: 6.26,
+    y: 6.51,
+    w: 4.82,
+    h: 0.22,
+    align: "right",
+    fontFace: "Yu Gothic",
+    fontSize: 8,
+    bold: true,
+    color: palette.fg,
+    margin: 0,
+  });
+
+  addFooter(slide, palette, "EDITABLE ASSETS");
+}
+
 export async function createFacePowerPoint(data: FacePptData) {
   const { pptx, slide, palette } = await createBase(data.template);
   pptx.title = data.title;
@@ -442,6 +767,7 @@ export async function createFacePowerPoint(data: FacePptData) {
   }
 
   addFooter(slide, palette, "MY FEATURE");
+  await addDecorationSlide(pptx, palette, data.template);
   await pptx.writeFile({
     fileName: `${sanitizeFileName(data.title)}.pptx`,
     compression: true,
@@ -701,6 +1027,7 @@ export async function createMotivationPowerPoint(
   }
 
   addFooter(slide, palette, "MOTIVATION GRAPH");
+  await addDecorationSlide(pptx, palette, data.template);
   await pptx.writeFile({
     fileName: `${sanitizeFileName(data.title)}.pptx`,
     compression: true,

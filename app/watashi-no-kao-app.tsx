@@ -651,6 +651,13 @@ function Welcome({
         <span className={styles.pcNote}>PCでの利用を推奨しています</span>
       </nav>
 
+      <aside className={styles.pcRecommendation} aria-label="ご利用環境について">
+        <b>PCでのご利用を推奨します</b>
+        <span>
+          PowerPoint（.pptx）ファイルを作成・ダウンロードするサービスです。
+        </span>
+      </aside>
+
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <span className={styles.kicker}>POWERPOINT SELF-PORTRAIT TOOL</span>
