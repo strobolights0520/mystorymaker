@@ -612,7 +612,7 @@ export async function createMotivationPowerPoint(
       color: palette.fg,
       margin: 0,
       fit: "shrink",
-      valign: "mid",
+      valign: "middle",
     });
   });
 
